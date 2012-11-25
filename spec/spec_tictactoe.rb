@@ -1,0 +1,190 @@
+require '~/Escritorio/LPP/tresenraya/tictactoe/lib/tictactoe'
+
+describe TicTacToe::Game do
+before :each  do
+@ttt_obj=TicTacToe::Game.new TicTacToe::HumanPlayer, TicTacToe::DumbPlayer
+end
+
+
+it "Deberiamos de elegir quien juega con 'X' y quien con 'O'" do
+@ttt_obj.x_player.mark.should=='X'
+@ttt_obj.o_player.mark.should=='O'
+end
+
+it "Deberia de haber un metodo que permita jugar" do
+resultados=["Congratulations, you win.\n\n","Tie game.\n\n","You lost tic-tac-toe?!\n\n"]
+
+
+#resultados.include?@ttt_obj.play
+end
+
+it "La seleccion del jugador X y el O debe de ser aleatoria" do
+score=[]
+30.times do
+@ttt_obj=TicTacToe::Game.new TicTacToe::HumanPlayer, TicTacToe::DumbPlayer
+score.push@ttt_obj.x_player.is_a?TicTacToe::HumanPlayer
+end
+score.uniq.length.should==2
+end
+
+end
+
+describe TicTacToe::Board do
+before :each do
+@scoreI=[" "]*9
+@bo_obj=TicTacToe::Board.new(@scoreI)
+@ttt_obj=TicTacToe::Game.new TicTacToe::HumanPlayer, TicTacToe::DumbPlayer
+end
+
+it "Debe de existir un array donde se guarden las casillas" do
+TicTacToe::Board.new(@scoreI).is_a?Array
+end
+
+it "Debe de existir los movimientos posibles" do
+TicTacToe::Board::MOVES.should== %w{a1    a2   a3   b1   b2   b3   c1   c2   c3}
+end
+
+it "Debe de existir un mC)todo que permita obtener la posicion de una casilla" do
+TicTacToe::Board.name_to_index('b2').should==4
+end
+
+it "Debe de existir un metodo que permita obtener la casilla de una posicion" do
+TicTacToe::Board.index_to_name(4).should=='b2'
+end
+
+
+it "Debe de existir un array que define las horizontales" do
+TicTacToe::Board::HORIZONTALS.should== [ [0, 1, 2], [3, 4, 5], [6, 7, 8] ]
+end
+
+it "Debe de existir un array que define las columnas" do
+TicTacToe::Board::COLUMNS.should==[ [0, 3, 6], [1, 4, 7], [2, 5, 8] ]
+end
+it "Debe de existir un array que define las diagonales" do
+TicTacToe::Board::DIAGONALS.should==[ [0, 4, 8], [2, 4, 6] ]
+end
+it "Debe de existir un array que define las filas" do
+TicTacToe::Board::ROWS.should== [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
+end
+
+it "Debe de existir un mC)todo que guarde en la casilla la X o la O en el vector squares" do
+@bo_obj.[]=('b2', 'X').should=='X'
+end
+
+it "Debe de haber un metodo que sepa cuando gana la maquina, el jugador o emparan" do
+@board=TicTacToe::Board.new(["X","O","X"," ","X","O","O"," ","X"])
+@board.won?.should=='X'
+@board=TicTacToe::Board.new(["O"," ","X","O"," ","X","O","X","O"])
+@board.won?.should=='O'
+@board=TicTacToe::Board.new(["X","O","X","O","O","X","X","X","O"])
+@board.won?.should==' '
+end
+
+it "Debe de haber un metodo que devuelve el conjunto de movimientos posibles" do
+@bo_obj['b3']='X'
+@bo_obj.moves.should==["a1","a2","a3","b1","b2","c1","c2","c3"]
+end
+
+
+end
+
+describe TicTacToe::Board::Row do
+it "La fila deberia de tener un nombre y una casilla" do
+@r_obj=TicTacToe::Board::Row.new('X', 'a2')
+@r_obj.equal?(['X', 'a2'])
+end
+end
+
+describe TicTacToe::Player do
+
+it "La marca del jugador debe de ser X, O, blanco  " do
+score=[]
+30.times do
+var=rand(3)
+if var==0
+@jh=TicTacToe::Player.new('X')
+elsif var==1
+@jh=TicTacToe::Player.new('O')
+else
+@jh=TicTacToe::Player.new(' ')
+end
+
+score.push@jh.mark
+end
+score.uniq.length.should==3
+['X', 'O', ' '].include?@jh.mark
+end
+end
+
+
+describe TicTacToe::HumanPlayer do
+before :each do
+@board=TicTacToe::Board.new(["X","O","X"," ","X","O","O"," ","X"])
+@final_board=TicTacToe::Board.new(["X","O","X"," ","X","O","O"," ","X"])
+@jh=TicTacToe::HumanPlayer.new('X')
+@ganar=["Congratulations, you win.\n\n"]
+@perder=["Tie game.\n\n"]
+@empatar=["You lost tic-tac-toe?!\n\n"]
+
+end
+it "Deberia de tener un metodo para definir el movimiento" do
+%w{a1    a2   a3   b1   b2   b3   c1   c2   c3}.include?@jh.move(@board)
+end
+
+it "Tiene que haber un ganador correcto" do
+@board=TicTacToe::Board.new(["X","O","X"," ","X","O","O"," ","X"])
+@ganar.include?@jh.finish(@board)
+@board=TicTacToe::Board.new(["X","O","X","O","O","X","X","X","O"])
+@empatar.include?@jh.finish(@board)
+@board=TicTacToe::Board.new(["X","O","X","X","O","X"," ","O","O"])
+@perder.include?@jh.finish(@board)
+
+end
+end
+
+describe TicTacToe::DumbPlayer do
+it "Los movimientos deben de ser aleatorios" do
+
+@dj=TicTacToe::DumbPlayer.new('O')
+score=[]
+300.times do
+b=[" "]*9
+board=TicTacToe::Board.new(b)
+score.push@dj.move(board)
+end
+score.uniq.length.should==9
+end
+end
+
+
+describe TicTacToe::SmartPlayer do
+it "Debe de coger el centro si esta libre" do
+@board=TicTacToe::Board.new(["X"," ","O"," "," "," ","O","X"," "])
+
+@sj=TicTacToe::SmartPlayer.new('O')
+@sj.move(@board).should=='b2'
+end
+
+it "Debe de coger la posicion adecuada para evitar perder si voy a ganar" do
+@board=TicTacToe::Board.new(["X"," ","X"," "," "," ","O","X","O"])
+
+@sj=TicTacToe::SmartPlayer.new('O')
+@sj.move(@board).should=='a2'
+end
+
+it "Debe de coger la posicion adecuada para no defender 'corner' " do
+@board=TicTacToe::Board.new(["X"," "," "," ","O"," "," "," "," "])
+
+@sj=TicTacToe::SmartPlayer.new('O')
+@sj.move(@board).should=='c3'
+end
+
+it "Debe defenderse del caso especial XOX en la diagonal" do
+@board=TicTacToe::Board.new(["X"," "," "," ","O"," "," "," ","X"])
+
+@sj=TicTacToe::SmartPlayer.new('O')
+%{a2 b1 b3 c2}.include?@sj.move(@board)
+end
+
+end
+
