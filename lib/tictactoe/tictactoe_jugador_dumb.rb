@@ -21,7 +21,7 @@ module TicTacToe
   class SmartPlayer < Player
     def move( board )
       moves = board.moves
-      
+     
       # If I have a win, take it.  If he is threatening to win, stop it.
       board.each_row do |row|
         if row.blanks == 1 and (row.xs == 2 or row.os == 2)

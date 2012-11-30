@@ -147,15 +147,62 @@ module TicTacToe
       @x_player.finish @board
     end
    
-def playarbitrario
 
-@x_player = TicTacToe::SmartPlayer.new("X")
-@o_player = TicTacToe::SmartPlayer.new("O")
 
-end
   
   end
 end
+
+def playarbitrario
+
+print "1->Humano
+       2->Dumb
+       3->Smart"
+      @j1 = $stdin.gets
+print "1->Humano
+       2->Dumb
+       3->Smart"
+      @j2 = $stdin.gets
+
+if(@j1=="1\n" and @j2=="1\n")
+   game = TicTacToe::Game.new TicTacToe::HumanPlayer,
+                   TicTacToe::HumanPlayer
+ game.play
+
+end
+if(@j1=="1\n" and @j2=="2\n")
+    game = TicTacToe::Game.new TicTacToe::HumanPlayer,
+                   TicTacToe::DumbPlayer
+game.play
+
+end
+if(@j1=="1\n" and @j2=="3\n")
+    game = TicTacToe::Game.new TicTacToe::HumanPlayer,
+                   TicTacToe::SmartPlayer
+game.play
+
+end
+if(@j1=="2\n" and @j2=="2\n")
+    game = TicTacToe::Game.new TicTacToe::DumbPlayer,
+                   TicTacToe::DumbPlayer
+print game.play
+
+end
+if(@j1=="2\n" and @j2=="3\n")
+    game = TicTacToe::Game.new TicTacToe::DumbPlayer,
+                   TicTacToe::SmartPlayer
+print game.play
+
+end
+if(@j1=="3\n" and @j2=="3\n")
+    game = TicTacToe::Game.new TicTacToe::SmartPlayer,
+                   TicTacToe::SmartPlayer
+print game.play
+
+end
+
+end
+
 
 if __FILE__ == $0
   if ARGV.size > 0 and ARGV[0] == "-d"
@@ -165,7 +212,10 @@ if __FILE__ == $0
     game = TicTacToe::Game.new TicTacToe::HumanPlayer,
                    TicTacToe::SmartPlayer
   end
-  game.play
+print 'JUEGA AL TICTACTOE'
+game.play
+print 'JUEGO DE DOS JUGADORES ARBITRARIOS'
+playarbitrario
 end
 
 
