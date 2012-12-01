@@ -24,8 +24,4 @@ def test3
 ["Congratulations, you win.\n\n","Tie game.\n\n","You lost tic-tac-toe?!\n\n"].include?@game3.play
 end
 
-def test4
-@game4=TicTacToe::Game.new TicTacToe::HumanPlayer, TicTacToe::HumanPlayer
-["Congratulations, you win.\n\n","Tie game.\n\n"].include?@game4.playarbitrario
-end
 end
